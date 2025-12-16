@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ page.title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ '/style.css' | relative_url }}" type="text/css">
+        <meta name="description" content="{{ page.description }}">
+        <meta name="author" content="{{ page.author }}">
+        <link rel="shortcut icon" href="{{ '/images/favicon.png' | relative_url }}" type="image/png">
+        <script src="{{ '/toggletheme.js' | relative_url }}" type="text/javascript"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const path = document.body.getAttribute('data-page-path');
+                fetch(`https://api.github.com/repos/bionik-aster/bionik-aster.github.io/commits?path=${path}&per_page=1`);
+                .then(r => r.json());
+                .then(commits => {
+                    const lastMod = new Date(commits[0].commit.committer.date);
+                    document.getElementById('last-modified').textContent = lastMod.toLocaleDateString();
+                });
+            });
+        </script>   
+    </head>
+    <body data-page-path="{{ page.path }}">
+        <div class="scanline"></div>
+        {{ content }}
+        <footer>
+            <p id="last-modified">Loading...</p>
+        </footer>
+    </body>
+</html>
